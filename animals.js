@@ -1,8 +1,15 @@
-let animals = ["Is this animal a mammal?" ,"Is this animal a carnivore?", "Does this animal stand on four legs?"];
+let animals = [
+  "Is this animal a mammal?" 
+,"Is this animal a carnivore?", 
+"Does this animal stand on four legs?"];
+// It is a lion
+// Diference between a lion and a elephant
+// Do it have tuskS?
 let answers = []
 
 function Node(obj) {
   this.animal = obj.animal;
+  this.question = obj.question
   this.pattern = obj.pattern;
   this.value = obj.val;
   this.left = null;
@@ -39,21 +46,13 @@ var tree = new Tree();
 
 
 let array = [
-{val:8,data:"nothing here"},
-{val:4,data:"nothing here"},
-{val:12,data:"nothing here"},
-{val:2,data:"nothing here"},
-{val:6,data:"nothing here"},
-{val:10,data:"nothing here"},
-{val:14,data:"nothing here"},
-{val:1,data:"nothing here",pattern:"n n n",animal:"pigeon "},
-{val:3,data:"nothing here",pattern:"n n y",animal:"parrot "},
-{val:5,data:"nothing here",pattern:"n y n",animal:"owl"},
-{val:7,data:"nothing here",pattern:"n y y",animal:"i dont now"},
-{val:9,data:"nothing here",pattern:"y n n",animal:"i dont now"},
-{val:11,data:"nothing here",pattern:"y n y",animal:"deer"},
-{val:13,data:"nothing here",pattern:"y y n",animal:"dog"},
-{val:15,data:"nothing here",pattern:"y y y",animal:"bear"}
+{val:8,animal:null,question:"Does it have feathers?"},
+{val:4,animal:null,question:"Does it live in a barnyard?"},
+{val:12,animal:null,question:"It is a mammal"},
+{val:1,animal:"chicken",question:null},
+{val:3,animal:"owl",question:null},
+{val:5,animal:"turkey",question:null},
+{val:7,animal:"i dont now",question:null},
 ]
 for (let i = 0; i < array.length; i++) {
   var index = new Node(array[i]);
@@ -69,7 +68,7 @@ function KeepQuestioning(node,nodeParent,i){
   
   // is a leaf?
   if (!node.left && !node.rigth) {
-     alert(`Your animal is ${node.animal}, ${node.pattern}`);
+     alert(`Your animal is ${node.animal}`);
   }else{
     var YOrN = prompt(`${animals[oo]}`);
     // let nodeParent = node;
@@ -77,12 +76,12 @@ function KeepQuestioning(node,nodeParent,i){
       // left:ç
       answers.push("n");
       oo++
-          KeepQuestioning(node.left,nodeParent,i)
+      KeepQuestioning(node.left,nodeParent,i)
     } else if(YOrN == "y"){
    // rigth:
       answers.push("y");
       oo++
-        KeepQuestioning(node.rigth,nodeParent,i)
+      KeepQuestioning(node.rigth,nodeParent,i)
     }
   }
 }
