@@ -1,81 +1,89 @@
-function Node(val) {
-  this.value = val;
-  this.left = null;
-  this.rigth = null;
+const express = require('express')
+const app = express()
+// let io = require('socket.io')(app);
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+
+app.use(express.json())
+
+const bitree = require('./tree.json');
+const tree = require('./tree.js');
+
+
+const port = 3000
+
+io.on('connection', onConnect);
+
+let userInfo = { idSocket: null, answer: [], rpta: null, lastAnswer: null }
+
+function onConnect(socket) {
+  console.log('a user connected');
+
+  console.log(socket.id);
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+
+
+  socket.on('start', (msg) => {
+    // console.log('hi ' + msg);
+    // tree.KeepQuestioning(bitree.root, socket);
+    // let answer = null
+    userInfo.answer = []
+    let question1 = tree.KeepQuestioning(bitree.root, socket.id, userInfo)
+    // console.log(userInfo,"question1");
+
+    userInfo.idSocket = socket.id
+    socket.emit('question', question1);
+
+
+  });
+
+
+  socket.on('answer', (rpta) => {
+    console.log('message: ' + rpta);
+    userInfo.answer.push(rpta)
+
+    console.log("answers ", userInfo.answer);
+    let question = tree.KeepQuestioning(bitree.root, socket.id, userInfo)
+    console.log(question, "question one time");
+    socket.emit('question', question);
+    question = null
+  });
+
+
+
+  socket.on('last-info', (lastinfo) => {
+    console.log(lastinfo,"lastinfo");
+    userInfo.answer.push("n")
+    userInfo.lastAnswer = true; // "n"
+    let question = tree.KeepQuestioning(bitree.root, socket.id, userInfo,lastinfo)
+    // socket.emit('question', question);
+  });
 }
-Node.prototype.addNodetoNode = function(node) {
-  if (this.value > node.value) {
-    if (this.left == null) {
-      this.left = node;
-    } else {
-      this.left.addNodetoNode(node);
-    }
-  } else if (this.value < node.value) {
-    if (this.rigth == null) {
-      this.rigth = node;
-    } else {
-      this.rigth.addNodetoNode(node);
-    }
-  }
-};
 
-function Tree() {
-  this.root = null;
-}
+// last-info
+// io.on('connection', (socket) => {
+//   console.log('a user connected');
+//   socket.on('disconnect', () => {
+//     console.log('user disconnected');
+//   });
+// });
 
-Tree.prototype.addNode = function(node) {
-  if (this.root == null) {
-    this.root = node;
-  } else {
-    this.root.addNodetoNode(node);
-  }
-};
-var tree = new Tree();
+// app.get('/', (req, res) => {
+//   tree.KeepQuestioning(bitree.root);
+//   // get first question
+//   let question = tree.sharetQuestion()
+//   res.json({ question})
+// })
+
+// app.post('/', (req, res) => {
+//   let answer = req.body
+//   let nextQuestion = tree.getNextQuestion(answer)
+//   res.json({ nextQuestion})
+// })
 
 
-// let array = [5,2,7,1,4,6,9,3,8];
-let array = [10,7,15,5,9,13,19,4,6,11,14,16,20,1,12,17,2,18,3];
-for (let i = 0; i < array.length; i++) {
-  var index = new Node(array[i]);
-    tree.addNode(index);
-}
-
-console.log(tree);
-KeepQuestioning(tree.root);
-
-function KeepQuestioning(node,nodeParent){
-  // is a leaf?
-  if (!node.left && !node.rigth) {
-    let semeGuest = prompt(`Is yur number ${node.value} ?`);
-    if (semeGuest == "n") {
-      alert(`Your number is  ${nodeParent.value}`);
-    } else if(semeGuest == "y"){
-      alert(`Your number is  ${node.value}`);
-    }
-
-  }else{
-    var YOrN = prompt(`Is yur number mayor que ${node.value}`);
-
-    let nodeParent = node;
-    if (YOrN == "n") {
-      // left:
-      console.log(node.left.value);
-         if(node.left == null){
-          alert(`Your number is  ${node.value}`);
-         }else{
-          KeepQuestioning(node.left,nodeParent)
-         }
-  
-    } else if(YOrN == "y"){
-   // rigth:
-  
-      if(node.rigth == null){
-        alert(`Your number is  ${node.value}`);
-  
-      }else{
-        KeepQuestioning(node.rigth,nodeParent)
-      }
-    }
-  }
-  
-}
+http.listen(4000, () => {
+  console.log('listening on *:4000');
+});
