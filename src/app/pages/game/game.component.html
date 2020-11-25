@@ -1,0 +1,128 @@
+<div class="bg_img">
+  <!-- <div fxShow fxHide.xs="false" fxHide.lg="true"> ... </div> -->
+  <div class="rw-ui-container"></div>
+  <div class="logo">
+    <img src="assets/logo_akinator.png" alt="">
+  </div>
+  <div class="bg">
+ 
+    <!-- imagen de akinator -->
+    <div class="wp_image">
+      <img src="assets/defi.png" alt="">
+    </div>
+
+
+
+
+    <div class="wp_questions">
+
+      <div class="bubble-question" *ngIf='!wrongGuess'>
+        <div class="bubble-tail" *ngIf="!mobile">
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="85" height="102">
+            <polygon points="30,0 30,20 29,25 27,30 22,37 15,45 0,60 30,60 30,102 85,102 85,0"></polygon>
+          </svg>
+          <p *ngIf="rpta && !rpta.animalName" class="number">{{counter}}</p>
+          <p *ngIf="rpta && rpta.animalName" class="number">----</p>
+
+        </div>
+        <div class="bubble-body">
+          <div *ngIf="mobile &&  !rpta.animalName">
+            <h5> Question Nro: <span>{{counter}}</span>
+            </h5>
+          </div>
+          <div *ngIf="rpta && !rpta.animalName">
+            <p>{{actualQuestion}}</p>
+          </div>
+          <div *ngIf="rpta && rpta.animalName && !winSentence" class="bubble-propose">
+            <div>
+              <p>I think of</p>
+            </div>
+            <div class="wp_animalImg">
+              <img src={{rpta.animalPhoto}} alt="" width="100px">
+            </div>
+            <h5>"{{rpta.animalName}}"</h5>
+          </div>
+          <div *ngIf="winSentence" class="win-bubble">
+            <div>
+              <h1>{{winSentence}}</h1>
+              <h2>{{rpta.animalName}}</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bubble-answers">
+        <!-- <div *ngIf="winSentence" class="win-bubble">
+          <div>
+            <h1>{{winSentence}}</h1>
+            <h2>A {{rpta}}</h2>
+          </div>
+        </div> -->
+
+        <div class="wp_answer_again" *ngIf="winSentence && !thanksNewAnimalBool">
+          <ul class="answer_again">
+            <li class="play_again" (click)="playAgain()">Play Again</li>
+          </ul>
+        </div>
+
+        <div *ngIf="rpta && !rpta.animalName && !wrongGuess">
+          <ul class="answer_list">
+            <li class="a_yes" (click)="nextQuestion(1)">Yes</li>
+            <li class="a_no" (click)="nextQuestion(0)">No</li>
+          </ul>
+        </div>
+
+        <div *ngIf="rpta && rpta.animalName && !winSentence && !wrongGuess">
+          <ul class="answer_list">
+            <li class="a_yes" (click)="lastAnwerF(true)">Yes</li>
+            <li class="a_no" (click)="lastAnwerF(false)">No</li>
+          </ul>
+        </div>
+
+
+        <div *ngIf='wrongGuess && !newAnimalCompleted' class="newAnimalQuestion">
+          <div>
+            <h1> {{newAnimalQuestion}}
+            </h1>
+          </div>
+
+          <div class="wp-input">
+            <input type="text" [(ngModel)]="newAnimal">
+            <button (click)='newAnimalCreated()'>
+              Send
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf='newAnimalCompleted  && !thanksNewAnimalBool' class="newAnimalQuestion">
+          <div>
+            <h1> {{questionToDiference}}
+            </h1>
+          </div>
+          <div class="wp-input">
+            <input type="text" [(ngModel)]="newQuestion">
+            <button (click)="newQuestionCreated()">
+              Send
+            </button>
+          </div>
+        </div>
+
+
+        <div *ngIf="thanksNewAnimalBool" class="thanksNewAnimalBool">
+          <div class="thanksNewAnimal">
+            <h1> {{thanksNewAnimal}}
+            </h1>
+          </div>
+          <div class="wp_answer_again">
+            <ul class="answer_again">
+              <li class="play_again" (click)="playAgain()">Play Again</li>
+            </ul>
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+</div>
