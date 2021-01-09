@@ -71,12 +71,11 @@ export class GameComponent implements OnInit {
   nextQuestion(answer: number){
     console.log("one time");
     this._akinator.pattern.push(answer);    
-    this._akinator.getQuestion().subscribe((data:any) => {
-      if (data.animal) {
-        this.rpta.animalName = data.question
-      }
+    let data = this._akinator.getQuestion()
+    if (data.animal) {
+      this.rpta.animalName = data.question
+    }
       this.actualQuestion = data.question
-    })
     this.counter++;
   }
 
@@ -108,8 +107,7 @@ export class GameComponent implements OnInit {
   // 
 
   hasStarted(){
-    this._akinator.getQuestion().subscribe((data:any) => {
-      this.actualQuestion = data.question
-    })
+    let data = this._akinator.getQuestion()
+    this.actualQuestion= data.question
   }
 }

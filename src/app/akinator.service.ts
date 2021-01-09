@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {Node,BST} from './../assets/class.js';
+import {default as bitree } from './../assets/tree03.json';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AkinatorService {
 
-
+  bst
   private gameHasStarted = new Subject<boolean>();
   gameHasStarted$ = this.gameHasStarted.asObservable();
-  url = "http://18.222.226.65:3000/play/"
   pattern = []
   
   announceMission(mission: boolean) {
@@ -23,13 +24,26 @@ export class AkinatorService {
   constructor(private http:HttpClient) { }
 
   getQuestion(){
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-      })
-    };
+
     console.log(this.pattern);
-    
-    return this.http.post(this.url,{pattern:this.pattern},httpOptions);
+    let findedNode =  this.bst.find(this.pattern)
+    if(findedNode.animal){
+
+      return {question:findedNode.question,animal:findedNode.animal}
+    }
+    console.log(findedNode.question);
+    return {question:findedNode.question}
+
+  }
+
+  startClass(){
+    this.bst =  new BST()
+    // @ts-ignore: Unreachable code error
+    this.bst.root = bitree.root
+    console.log(this.bst);
+  }
+  
+  startTree(){
+    console.log(bitree);
   }
 }
